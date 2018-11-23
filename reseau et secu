@@ -1,0 +1,46 @@
+ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoers>
+
+
+-fixer l'address ip
+	modifier le ficheir /etc/network/interfaces
+	{
+		eth0
+		enlever la ligne qui parametrer l'utilisation du dhcp
+		et ajouter les lignes qui configure l'nterface de maniere static
+
+		auto eth0
+		iface eth0 inet static
+			address 192.192.42.1
+			netmask 255.255.255.252
+			gateway 10.13.254.254
+	}
+
+
+-ssh caracteristique :
+	pour le nat
+		on a jout une redirection vers l'address ip du gest dans les paramteres network <127.0.0.1:2424 ==> 10.0.2.15:4242>
+	PermitRootLogin no
+	public key
+	{
+		1- generer la public key cote client <ssh-keygen -t rsa>
+			les fichiers sont sauvegerger dans ~/.ssh/
+		2- transfert des clefs vers le clients <ssh-copy-id ~/.ssh/id_rsa.pub user@client-ip -p $PORT>
+	}
+
+
+-iptables :
+	{
+		
+	}
+
+-ssmpt <envoyer les mail>
+{
+	configurer les fichiers
+		- /etc/ssmtp/revalises
+		- /etc/sstmp/ssmtp.conf
+
+		id  : 42roger.skyline@gamil.com
+		mdp : 424242@424242
+
+		echo "Message Body" | mail -s "Message Subject" 42roger.skyline@gamil.com
+}
