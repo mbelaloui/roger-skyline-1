@@ -1,6 +1,5 @@
 ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoers>
 
-
 -fixer l'address ip
 	modifier le ficheir /etc/network/interfaces
 	{
@@ -28,9 +27,62 @@ ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoe
 	}
 
 
--iptables :
+-iptables : 
 	{
+		iptbales est un moyen qui va permettre de gerer les requetes entrante et sortante d'une machine
+		iptables nous permet de configurer Netfilter
+		pour manipuler iptables il faut les droits root
+
+
+		iptables [ACDIRLSFZNXPEh] <INPUT, FORWARD, OUTPUT> -[4, 6, p, s, d, m, j, g, i, o, f, c, v, w, n, x] -j [ACCEPT, DROP,RETURN]
 		
+		-A : ajouter une regles a une cyble
+
+		-P : modifier la valeur par defaut de la polique de gestion de packet d'une cyble definit <INPUT, OUTPUT, FORWARD, ...>
+
+		-F : supprime toute les regles ajouter
+
+
+
+		-d : port de destination
+
+		-i : interface de destination
+
+		-s : ip sources, peut etre une ip reseau
+
+		-p : our cybler un protocole bien definit, si cette option n'est pas specifie tout les protocoles sont concernes
+			<tcp, udp, udplite, icmp, icmpv6, esp, ah, sctp, mh>
+
+		-j : cette option permet de specifer ce qu'il faut faire si il ya un match entre le packet et la regle.
+
+		-i : pour specifier une interface reseau sur laquel on va appliquer la regle
+
+
+		FORWARD
+			sudo iptables -A FORWARD -j DROP
+
+		INTPUT
+			* accepter le ssh:
+				sudo iptables -A INPUT -i eth0 -s 10.13.0.0/16 -p tcp -d 2424 -j ACCEPT
+			
+			* laisser passer le service www
+				sudo iptables -A INPUT -i eth0 -p tcp -d 80 -j ACCEPT
+			
+			* pour bloquer tout le reste:
+				sudo iptables -P INPUT DROP		<changement de politique de la chaine INPUT>
+				sudo iptables -A INPUT -j DROP	<ajout de la regle a la chaine INPUT>
+
+
+
+		OUTPUT
+			* accepter le ssh:
+				sudo iptables -A OUTPUT -s 10.13.0.0/16 -j ACCEPT
+			* laisser passer le servise mail
+
+
+			* pour bloquer tout le reste:
+				sudo iptables -P OUTPUT DROP	<changement de politique de la chaine INPUT>
+				sudo iptables -A OUTPUT -j DROP	<ajout de la regle a la chaine INPUT>
 	}
 
 -ssmpt <envoyer les mail>

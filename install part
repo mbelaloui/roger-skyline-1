@@ -13,4 +13,5 @@ apres l'instalation :
 			== > install sudo  [ apt install sudo ]
 			== > install vim   [ apt install vim ]
 			== > install ssmtp [ apt install ssmtp mailutils]
+			== > install iptables-persistent [apt install iptables-persistent]
 }
