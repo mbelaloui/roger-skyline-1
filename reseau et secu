@@ -9,9 +9,10 @@ ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoe
 
 		auto eth0
 		iface eth0 inet static
-			address 192.192.42.1
+			address 10.0.2.1
 			netmask 255.255.255.252
-			gateway 10.13.254.254
+			gateway 10.0.2.2
+			droadcast 10.0.2.3
 	}
 
 
@@ -72,17 +73,6 @@ ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoe
 				sudo iptables -P INPUT DROP		<changement de politique de la chaine INPUT>
 				sudo iptables -A INPUT -j DROP	<ajout de la regle a la chaine INPUT>
 
-
-
-		OUTPUT
-			* accepter le ssh:
-				sudo iptables -A OUTPUT -s 10.13.0.0/16 -j ACCEPT
-			* laisser passer le servise mail
-
-
-			* pour bloquer tout le reste:
-				sudo iptables -P OUTPUT DROP	<changement de politique de la chaine INPUT>
-				sudo iptables -A OUTPUT -j DROP	<ajout de la regle a la chaine INPUT>
 	}
 
 -ssmpt <envoyer les mail>
