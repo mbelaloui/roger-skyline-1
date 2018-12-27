@@ -12,6 +12,15 @@ apres l'instalation :
 			== > install ssh   [ apt install ssh ]
 			== > install sudo  [ apt install sudo ]
 			== > install vim   [ apt install vim ]
-			== > install ssmtp [ apt install ssmtp mailutils]
-			== > install iptables-persistent [apt install iptables-persistent]
+			== > install ssmtp [ apt install ssmtp mailutils ]
+
+			== > intall apache [ apt install nginx ]
+			#== > intall apache [ apt install apache2 ]
+			== > install ssl [ apt install openssl ]
+			== > install fail2ban [ apt-get install fail2ban ]
+
+			== > intall portsentry [ apt-get install portsentry ]
+			#== > install iptables-persistent [apt install iptables-persistent ]  on peut ne pas utiliser iptables persistant 
+
+
 }

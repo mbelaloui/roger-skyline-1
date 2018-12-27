@@ -1,4 +1,34 @@
+echo "set number
+set smartindent
+set autoindent
+set ruler
+syntax on" > ~/.vimrc
+
 ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoers>
+
+-ssmpt <envoyer les mail>
+{
+	configurer les fichiers
+		- /etc/ssmtp/revalises
+
+root:42roger.skyline@gamil.com:smtp.gmail.com:587
+user:42roger.skyline@gamil.com:smtp.gmail.com:587
+
+		- /etc/sstmp/ssmtp.conf
+
+root=42roger.skyline@gamil.com
+mailhub=smtp.gmail.com:587
+FromLineOverride=YES
+UseSTARTTLS=YES
+AuthUser=42roger.skyline
+AuthPass=424242@424242
+UseSTRATTLS=YES
+
+		id  : 42roger.skyline@gamil.com
+		mdp : 424242@424242
+
+		echo "Message Body" | mail -s "Message Subject" 42roger.skyline@gamil.com
+}
 
 -fixer l'address ip
 	modifier le ficheir /etc/network/interfaces
@@ -14,21 +44,35 @@ ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoe
 			gateway 10.0.2.2
 			droadcast 10.0.2.3
 	}
-
+	pour le nat
+		on a jout une redirection vers l'address ip du gest dans les paramteres network <127.0.0.1:2424 ==> 10.0.2.1:4242>
 
 -ssh caracteristique :
-	pour le nat
-		on a jout une redirection vers l'address ip du gest dans les paramteres network <127.0.0.1:2424 ==> 10.0.2.15:4242>
 	PermitRootLogin no
 	public key
 	{
-		1- generer la public key cote client <ssh-keygen -t rsa>
+		1- generer la public rsa key cote client <ssh-keygen -t rsa -q>
 			les fichiers sont sauvegerger dans ~/.ssh/
-		2- transfert des clefs vers le clients <ssh-copy-id ~/.ssh/id_rsa.pub user@client-ip -p $PORT>
+		2- transfert des clefs vers le clients <ssh-copy-id user@127.0.0.1 -p2424>
 	}
+	modifier le fichier /etc/ssh/sshd_config pour le reste 
+	[
+		port 4242
+		PermitRootLogin : no
+		PasswordAuthentication no ****** optionelle je la garde pour pouvoir tester le ban avec fail2ban
+	]
 
 
--iptables : 
+cron 
+{
+	echo "0 4 * * 1		(apt-get update && apt-get upgrade -y) >> /var/log/update_script.log" >> script_ex02
+	echo "@reboot		(apt-get update && apt-get upgrade -y) >> /var/log/update_script.log" >> script_ex02
+	echo "0 0 * * * 	(sh /surveiller.sh)" >> script_ex02
+	crontab script_ex02
+	rm -f script_ex02
+}
+
+-iptables : pour voir les port utiliser <netstat -ltunp>
 	{
 		iptbales est un moyen qui va permettre de gerer les requetes entrante et sortante d'une machine
 		iptables nous permet de configurer Netfilter
@@ -59,30 +103,128 @@ ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoe
 		-i : pour specifier une interface reseau sur laquel on va appliquer la regle
 
 
-		FORWARD
-			sudo iptables -A FORWARD -j DROP
+		#FLUSH
+		iptables -F
 
-		INTPUT
-			* accepter le ssh:
-				sudo iptables -A INPUT -i eth0 -s 10.13.0.0/16 -p tcp -d 2424 -j ACCEPT
-			
-			* laisser passer le service www
-				sudo iptables -A INPUT -i eth0 -p tcp -d 80 -j ACCEPT
-			
-			* pour bloquer tout le reste:
-				sudo iptables -P INPUT DROP		<changement de politique de la chaine INPUT>
-				sudo iptables -A INPUT -j DROP	<ajout de la regle a la chaine INPUT>
+		#Polique
+		iptables -P INPUT DROP
+		#iptables -P OUTPUT DROP
+		iptables -P FORWARD DROP
 
+
+		#conexion etablie	<si on ne met pas sa la conexion est tres lente>
+		iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+		iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+		#loopback <localhost>
+		iptables -A INPUT -i lo -j ACCEPT
+		iptables -A OUTPUT -o lo -j ACCEPT
+
+		#SSH 
+		iptables -A INPUT -i eth0 -p tcp --dport 4242 -j ACCEPT
+			
+		# le service http
+		iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+		iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+
+		# le service https
+		iptables -A INPUT -i eth0 -p tcp --dport 443 -j ACCEPT
+		iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+
+
+		NB : pour bloquer tout le reste: si on a pas changer la politique [cependant il faut faire attention a les ajouter à la premiere ligne des regles]
+			sudo iptables -P INPUT DROP		<changement de politique de la chaine INPUT>
+			sudo iptables -A INPUT -j DROP	<ajout de la regle a la chaine INPUT>
+
+		voir ufw pour une interface plus simple pour manipuler une iptable
+		mettre le tout dans un fichier /home/user/firewall
+	}
+	ajouter a /etc/network/interface la line suivante
+	{
+		sudo sh firewall.rules
+		iptables-save > /home/user/firewall.restor
+		pre-up iptables-restore < /home/user/firewall.restor
 	}
 
--ssmpt <envoyer les mail>
+
+serveur web 
 {
-	configurer les fichiers
-		- /etc/ssmtp/revalises
-		- /etc/sstmp/ssmtp.conf
-
-		id  : 42roger.skyline@gamil.com
-		mdp : 424242@424242
-
-		echo "Message Body" | mail -s "Message Subject" 42roger.skyline@gamil.com
+	apache2
+	#nginx
+	...
 }
+
+ssl 
+{
+	openssl req -new -x509 -days 365 -nodes -out /etc/ssl/certs/mailserver.crt -keyout /etc/ssl/private/mailserver.key
+	chmod 440 /etc/ssl/private/mailserver.key
+	a2enmod ssl
+
+	# vhost https
+	<VirtualHost *:443>
+	DocumentRoot /var/www/webmail
+	ServerName  webmail.mondomaine.com
+
+	ServerSignature Off
+	ErrorLog ${APACHE_LOG_DIR}/error_webmail.log      
+	LogLevel info      
+	CustomLog ${APACHE_LOG_DIR}/access_webmail.log combined      
+
+	SSLEngine on
+	SSLCertificateFile /etc/ssl/certs/mailserver.crt
+	SSLCertificateKeyFile /etc/ssl/private/mailserver.key
+	</VirtualHost>
+
+	https://www.vincentliefooghe.net/content/activer-un-accès-https-sur-apache
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+an port portsentry
+{
+	https://fr-wiki.ikoula.com/fr/Se_protéger_contre_le_scan_de_ports_avec_portsentry
+}
+
+
+
+
+
