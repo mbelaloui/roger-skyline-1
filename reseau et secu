@@ -24,9 +24,6 @@ AuthUser=42roger.skyline
 AuthPass=424242@424242
 UseSTRATTLS=YES
 
-		id  : 42roger.skyline@gamil.com
-		mdp : 424242@424242
-
 		echo "Message Body" | mail -s "Message Subject" 42roger.skyline@gamil.com
 }
 
@@ -114,7 +111,7 @@ ssl
 			address 10.0.2.1
 			netmask 255.255.255.252
 			gateway 10.0.2.2
-			droadcast 10.0.2.3
+			broadcast 10.0.2.3
 	}
 	pour le nat
 		on a jout une redirection vers l'address ip du gest dans les paramteres network <127.0.0.1:4222 ==> 10.0.2.1:2424>
