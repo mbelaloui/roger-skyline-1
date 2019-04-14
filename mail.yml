@@ -1,0 +1,45 @@
+---
+- name: configure mail service
+  hosts: roger
+  remote_user: user
+  become: true
+  become_method: sudo
+  tasks:
+          #add restriction to the file /etc/ssmtp/ssmtp.conf <640>
+          #optimise the send of the password <secret management...>
+          #allow conexion to the ssmtp in the firewalle   p587  // see if i can change the port
+          - name: clean ssmtp file
+            lineinfile:
+                    path: /etc/ssmtp/ssmtp.conf
+                    regexp: "root|mailhub|AuthUser|AuthPass|FromLineOverride|UseSTARTTLS|rewriteDomain|hostname|UseTLS"
+                    state: absent
+
+          - name: configure ssmtp file
+            lineinfile:
+                    path: /etc/ssmtp/ssmtp.conf
+                    state: present
+                    create: yes
+                    line: "root=42roger.skyline@gamil.com\nmailhub=smtp.gmail.com:587\nFromLineOverride=YES\nUseSTARTTLS=YES\nAuthUser=42roger.skyline\nAuthPass=424242@424242\n"
+
+          - name: add restriction to sstmp configure file
+            file:
+                    path: /etc/ssmtp/ssmtp.conf
+                    mode: 0640
+
+          - name: clean revaliases file
+            lineinfile:
+                    path: /etc/ssmtp/revaliases
+                    regexp: "root|user" 
+                    state: absent
+
+          - name: configure revaliases file
+            lineinfile:
+                    path: /etc/ssmtp/revaliases
+                    state: present
+                    create: yes
+                    line: "root:42roger.skyline@gamil.com:smtp.gmail.com:587\nuser:42roger.skyline@gamil.com:smtp.gmail.com:587"
+ 
+          - name: add restriction to sstmp configure file
+            file:
+                    path: /etc/ssmtp/revaliases
+                    mode: 0640
