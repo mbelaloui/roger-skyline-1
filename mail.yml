@@ -4,15 +4,22 @@
   remote_user: user
   become: true
   become_method: sudo
+  port: 2424
   tasks:
+          #- name: set ssh Port
+          #  set_fact:
+          #          ansible_port: 2424
           #add restriction to the file /etc/ssmtp/ssmtp.conf <640>
           #optimise the send of the password <secret management...>
           #allow conexion to the ssmtp in the firewalle   p587  // see if i can change the port
+          
           - name: clean ssmtp file
             lineinfile:
                     path: /etc/ssmtp/ssmtp.conf
-                    regexp: "root|mailhub|AuthUser|AuthPass|FromLineOverride|UseSTARTTLS|rewriteDomain|hostname|UseTLS"
+                    #regexp: "root|mailhub|AuthUser|AuthPass|FromLineOverride|UseSTARTTLS|rewriteDomain|hostname|UseTLS"
+                    regexp: "root|mailhub|AuthUser|AuthPass|FromLineOverride|UseSTARTTLS"
                     state: absent
+
 
           - name: configure ssmtp file
             lineinfile:

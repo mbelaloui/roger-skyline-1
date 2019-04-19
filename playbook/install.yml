@@ -2,9 +2,13 @@
 - name: Install part
   remote_user: user
   hosts: roger
-  #change to root
   vars:
           pachages:
+                  - ssh
+                  - sudo
+                  - fail2ban
+                  - apache2
+                  - portsentry
   become: true
   become_method: sudo
   tasks:
@@ -13,27 +17,7 @@
                     update_cache: yes
                     upgrade: yes
                     state: latest
-
-          - name: install sshd
-            apt:
-                    name: ssh
-                    state: latest
-
-          - name: insatll sudo
-            apt:
-                    name: sudo
-                    state: latest
-
-          - name: install fail2ban
-            apt:
-                    name: fail2ban
-                    state: latest
-
-          - name: install portsentry
-            apt:
-                    name: portsentry
-                    state: latest
-
+ 
           - name: install mail
             apt:
                     name: "{{mail_stuff}}"
@@ -42,11 +26,7 @@
                             - ssmtp
                             - mailutils
 
-          - name: install web-serveur
-            apt:
-                    name: apache2
-                    state: latest
-
+                    
           - name: clean serveur [useless packages/dependencies]
             apt:
                     autoclean: yes
