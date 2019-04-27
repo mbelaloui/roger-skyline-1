@@ -1,0 +1,26 @@
+---
+- name: ssh stuff
+  hosts: roger
+  remote_user: user
+  become: true
+  become_method: sudo
+  tasks:
+          - name: change Port
+            replace:
+                    dest: "/etc/ssh/sshd_config"
+                    regexp: "#Port 22"
+                    replace: "#port 22\nPort 2424"
+ 
+          - name: Deny  Root Login
+            replace:
+                    dest: "/etc/ssh/sshd_config"
+                    regexp: "#PermitRootLogin prohibit-password"
+                    replace: "#PermitRootLogin prohibit-password\nPermitRootLogin no"
+                    #add all the other cases in the regex
+ 
+          - name: Public Key
+            replace:
+                    dest: "/etc/ssh/sshd_config"
+                    regexp: "#PubkeyAuthentification no"
+                    replace: "#PubkeyAuthentification no\nPubkeyAuthentification yes"
+                    #add all the other cases in the regex

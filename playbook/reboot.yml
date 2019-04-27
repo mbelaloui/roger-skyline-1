@@ -1,0 +1,8 @@
+---
+- name: reboot and wait until the serveur is up
+  hosts: roger
+  become: true
+  become_user: root
+  tasks:
+        - name: reboot machine
+          reboot:

@@ -1,0 +1,33 @@
+---
+- name: Install part
+  remote_user: user
+  hosts: roger
+  vars:
+          pachages:
+                  - ssh
+                  - sudo
+                  - fail2ban
+                  - apache2
+                  - portsentry
+  become: true
+  become_method: sudo
+  tasks:
+          - name: update / upgrade
+            apt:
+                    update_cache: yes
+                    upgrade: yes
+                    state: latest
+ 
+          - name: install mail
+            apt:
+                    name: "{{mail_stuff}}"
+            vars:
+                    mail_stuff:
+                            - ssmtp
+                            - mailutils
+
+                    
+          - name: clean serveur [useless packages/dependencies]
+            apt:
+                    autoclean: yes
+                    autoremove: yes
