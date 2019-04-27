@@ -1,19 +1,5 @@
-Skip to content
- 
-Search or jump to…
 
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@mbelaloui 
-Code  Issues 0  Pull requests 0  Projects 0  Wiki  Pulse  Community
-roger-skyline-1/reseau et secu
- Mehdi aissa BELALOUI 25-02-2019
-5a8cd9a on Feb 25
-307 lines (220 sloc)  7.82 KB
-    
+<p1> config vim </p1>
 echo "set number
 set smartindent
 set autoindent
