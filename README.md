@@ -1,5 +1,5 @@
 
--config vim
+- config vim
 
 echo "set number
 set smartindent
