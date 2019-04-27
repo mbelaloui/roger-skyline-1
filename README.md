@@ -1,5 +1,6 @@
 
-<p1> config vim </p1>
+-config vim
+
 echo "set number
 set smartindent
 set autoindent
