@@ -1,11 +1,6 @@
+#pas encore fini d'automatiser et de documenter
 
-- config vim
 
-echo "set number
-set smartindent
-set autoindent
-set ruler
-syntax on" > ~/.vimrc
 
 set sudo privilege to user : usermod -aG sudo username || ajout de user dans le group des sudoers et  <add user au fichier /etc/sudo sudoers>
 
@@ -23,48 +18,10 @@ root=42roger.skyline@gamil.com
 mailhub=smtp.gmail.com:587
 FromLineOverride=YES
 UseSTARTTLS=YES
-AuthUser=42roger.skyline
-AuthPass=424242@424242
+AuthUser=login
+AuthPass=pass
 UseSTRATTLS=YES
-
 		echo "Message Body" | mail -s "Message Subject" 42roger.skyline@gamil.com
-}
-
-cron su root
-{
-
-
-#!/bin/bash
-
-SAUV_MD5_TAB=sauv_md5_crontab.txt
-     MD5_TAB=md5_crontab.txt
-
-if [ ! -f "$SAUV_MD5_TAB" ]
-then
-	md5sum /etc/crontab > "$SAUV_MD5_TAB"
-	echo "aletre /etc/crontab
-       	pas de fichier ref pour comparer la signature....
-	probablement la premier execution du script...
-	un fichier sauvgarde va etre cree...
-	" | mail -s "alerte" root
-else
-	md5sum /etc/crontab > "$MD5_TAB"
-	DIFF=$(diff "$MD5_TAB" "$SAUV_MD5_TAB")
-	if [  "$DIFF" ]
-	then
-		echo "	aletre /etc/crontab
-		event dans le dossier /etc/crontab
-	       	le fichier n'a pas la meme signature...." | mail -s "alerte" root
-	fi
-	rm "$MD5_TAB"
-fi
-
-
-echo "0 4 * * 1     (apt-get update && apt-get upgrade -y) >> /var/log/update_script.log
-@reboot     (apt-get update && apt-get upgrade -y) >> /var/log/update_script.log
-0 0 * * *     (sh /surveiller.sh)" >> script_ex02
-crontab script_ex02
-rm -f script_ex02
 }
 
 serveur web 
@@ -152,79 +109,6 @@ ssl
 
 		-i : pour specifier une interface reseau sur laquel on va appliquer la regle
 
-echo "#!/bin/sh
-#
-# firewall.rull
-
-# Nous vidons les chaines predefinies :
-iptables -F
-
-# Nous supprimons les regles des chaines personnelles :
-iptables -X
-
-# Nous les faisons pointer par déut sur DROP
-iptables -P INPUT DROP
-#iptables -P OUTPUT DROP
-iptables -P FORWARD DROP
-
-#Autorise les rénses
-iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-#iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-
-#(Facultatif : autoriser l'accés au serveur sdepuis l'extérieur)
-iptables -A INPUT -p TCP --dport 2424 -i enp0s3 -j ACCEPT
-iptables -A INPUT -p TCP --dport ssh -i enp0s3 -j ACCEPT
-iptables -A INPUT -p TCP --dport http -i enp0s3 -j ACCEPT
-
-# Mail SMTP:25
-#iptables -t filter -A INPUT -p tcp --dport 25 -j ACCEPT
-#iptables -t filter -A OUTPUT -p tcp --dport 25 -j ACCEPT
-
-# Mail POP3:110
-#iptables -t filter -A INPUT -p tcp --dport 110 -j ACCEPT
-#iptables -t filter -A OUTPUT -p tcp --dport 110 -j ACCEPT
-
-# Mail IMAP:143
-#iptables -t filter -A INPUT -p tcp --dport 143 -j ACCEPT
-#iptables -t filter -A OUTPUT -p tcp --dport 143 -j ACCEPT
-
-# Mail POP3
-#iptables -A INPUT -p tcp --dport 995 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-#iptables -A OUTPUT -p tcp --sport 995 -m conntrack --ctstate ESTABLISHED -j ACCEPT
-
-# Mail POP3S
-#iptables -A INPUT -p tcp --dport 993 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-#iptables -A OUTPUT -p tcp --sport 993 -m conntrack --ctstate ESTABLISHED -j ACCEPT
-
-# anti scan
-iptables -A INPUT -i enp0s3 -p tcp --tcp-flags FIN,URG,PSH FIN,URG,PSH -j DROP
-iptables -A INPUT -i enp0s3 -p tcp --tcp-flags ALL ALL -j DROP
-iptables -A INPUT -i enp0s3 -p tcp --tcp-flags ALL NONE -j DROP
-iptables -A INPUT -i enp0s3 -p tcp --tcp-flags SYN,RST SYN,RST -j DROP
-iptables -A INPUT -i enp0s3 -p tcp --tcp-flags SYN,ACK,FIN,RST RST -j DROP
-
-#incoming malformed XMAS packets
-iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
-
-#Incoming malformed NULL packets
-iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
-
-#Autoriser DNS
-#iptables -A OUTPUT --protocol udp --destination-port 53 -j ACCEPT
-
-#Sortie web
-#iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -j ACCEPT
-
-# Mail SMTP:25
-#iptables -t filter -A INPUT -p tcp --dport 25 -j ACCEPT
-#iptables -t filter -A OUTPUT -p tcp --dport 25 -j ACCEPT
-
-#Regles de secu
-iptables -A INPUT -p all -j DROP
-#iptables -A OUTPUT -p all -j DROP
-iptables -A FORWARD -p all -j DROP" > /home/user/firewall.rules
-
-
 echo "
 		#FLUSH
 		iptables -F
@@ -283,11 +167,6 @@ an port portsentry
 
 
 }
-
-
-
-
-
 
 
 -ssh caracteristique :
