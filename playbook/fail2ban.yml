@@ -1,0 +1,18 @@
+---
+- name: Install and config fail2ban play
+  hosts: all
+  become: 'True'
+  tasks:
+          - name: update package
+            apt:
+                    autoclean: 'True'
+                    autoremove: 'True'
+                    update_cache: 'True'
+                    upgrade: 'True'
+
+          - name: install pachages
+            apt:
+                    name: fail2ban
+                    state: present
+
+...
