@@ -1,7 +1,8 @@
 ---
-
 - name: Install and config fail2ban play
-  hosts: all
+  #hosts: all
+  #hosts: test
+  hosts: roger
   become: 'True'
   tasks:
           - name: Update system package
@@ -17,10 +18,9 @@
                     state: present
             notify: restart fail2ban
 
-            ## this action can be set to just configure fail2ban in general
           - name: Config Fail2ban
             template:
-                    src: templates/jail.local.j2
+                    src: templates/fail2ban_jail.local.j2
                     dest: /etc/fail2ban/jail.local
                     group: root
                     owner: root
@@ -28,14 +28,15 @@
             notify: restart fail2ban
 
            ## this action can be added to the ssh role configure and must be deteleted from here
-          - name: Config Fail2ban
-            template:
-                    src: templates/fail2ban_custom_ssh.conf.j2
-                    dest: /etc/fail2ban/jail.d/custom_ssh.conf
-                    group: root
-                    owner: root
-                    mode: 0644
-            notify: restart fail2ban
+           #          - name: Config Fail2ban
+           # template:
+           #         src: templates/fail2ban_custom_ssh.conf.j2
+           #         dest: /etc/fail2ban/jail.d/custom_ssh.conf
+           #         group: root
+           #         owner: root
+           #         mode: 0644
+           # notify: restart fail2ban
+
 
           - name: start Fail2bane service
             service: name=fail2ban state=started enabled='True'
@@ -43,5 +44,4 @@
   handlers:
           - name: restart fail2ban
             service: name=fail2ban state=restarted
-
 ...

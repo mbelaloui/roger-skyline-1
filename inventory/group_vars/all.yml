@@ -1,0 +1,14 @@
+---
+controler_ip: 192.168.1.14
+
+
+fail2ban_bantime: 60
+fail2ban_findtime: 60
+fail2ban_maxretry: 3
+fail2ban_backend: auto
+fail2ban_usedns: warn
+fail2ban_logencoding: auto
+
+#fail2ban_destmail: 
+#fail2ban_sender:    roger....gmail.com    \should i use vault here or just in the configuration of the sendmail \ 
+...
