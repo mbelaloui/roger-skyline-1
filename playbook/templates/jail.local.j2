@@ -15,20 +15,20 @@
 before = paths-debian.conf
 
 [DEFAULT]
-ignoreip = 127.0.0.1/8
+ignoreip = 127.0.0.1/8 192.168.1.14 ############################# add a var to ignoreip of the bastion to avoid been baned 
 ignorecommand =
 # "bantime" is the number of seconds that a host is banned.
 bantime  = 600
-#bantime  = {{ bantime }}
+#bantime  =  bantime 
 #A host is banned if it has generated "maxretry" during the last "findtime" seconds.
 findtime  = 600
-#findtime = {{ findtime }}
+#findtime =  findtime 
 # "maxretry" is the number of failures before a host get banned.
 maxretry = 5
-#maxretry = {{ maxretry }}
+#maxretry =  maxretry 
 # "backend" specifies the backend used to get files modification.
 backend = auto
-#backend = {{ backend }}
+#backend =  backend 
 
 # "usedns" specifies if jails should trust hostnames in logs,
 #   warn when DNS lookups are performed, or ignore all hostnames in logs
