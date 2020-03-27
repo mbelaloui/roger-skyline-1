@@ -1,0 +1,54 @@
+---
+- name: Configure node to sendmail
+  hosts: test
+  tasks:
+          - name: install sendmail package
+            become: 'True'
+            apt:
+                    name: ssmtp
+                    state: present
+                    update_cache: 'True'
+
+                    #add user ssmpt  et le rendre proprio du fichier template d ela configuration
+                    #
+                    #
+
+                    #          - name: Configure ssmtp user
+                    #            user:
+                    #name: ssmtp
+                    #groups: nogroup
+                    #create_home: 'False'
+                    #state: present
+                    #
+
+          - name: Config server
+            become: 'True'
+            template:
+                    src: templates/ssmtp.conf.j2
+                    dest: /etc/ssmtp/ssmtp.conf
+                    owner: root
+                    group: root
+                    mode: 0660
+
+
+          - name: Config server
+            become: 'True'
+            template:
+                    src: templates/revaliases.j2
+                    dest: /etc/ssmtp/revaliases
+                    owner: root
+                    group: root
+                    mode: 0660
+
+
+
+                    #  Ouverture du port 25 en tcp en sortie (smtp simple) :
+                    #  sudo ufw allow out 25/tcp
+                    #
+                    #  Ouverture du port 465 en tcp en sortie (smtp sécurisé) :
+                    #  sudo ufw allow out 465/tcp
+                    #  
+                    #  Ouverture du port 587 en tcp en sortie (smtp sécurisé avec TLS/SSL) :
+                    #  sudo ufw allow out  587/tcp
+
+...

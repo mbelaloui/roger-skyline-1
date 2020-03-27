@@ -10,5 +10,25 @@ fail2ban_usedns: warn
 fail2ban_logencoding: auto
 
 #fail2ban_destmail: 
-#fail2ban_sender:    roger....gmail.com    \should i use vault here or just in the configuration of the sendmail \ 
+#fail2ban_sender:    roger....gmail.com    \should i use vault here or just in the configuration of the sendmail \
+#
+
+
+
+ssmtp_root_mail: 42roger.skyline@gamil.com
+ssmtp_mailhub: smtp.gmail.com:587
+ssmtp_domain: gmail.com
+ssmtp_hostnam: localhost
+ssmtp_user: 42roger.skyline@gmail.com
+ssmtp_pass: 424242@424242
+ssmtp_login: hostname
+ssmtp_override: yes
+
+ssmtp_mail_user: mail_user
+ssmtp_mail_pseudo: 42roger.skyline
+ssmtp_provider: gamil.com
+ssmtp_mail_provider: smtp.gmail.com
+ssmpt_port: 587
+
+#https://wiki.debian.org/sSMTP
 ...
