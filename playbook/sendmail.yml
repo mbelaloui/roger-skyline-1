@@ -9,18 +9,6 @@
                     state: present
                     update_cache: 'True'
 
-                    #add user ssmpt  et le rendre proprio du fichier template d ela configuration
-                    #
-                    #
-
-                    #          - name: Configure ssmtp user
-                    #            user:
-                    #name: ssmtp
-                    #groups: nogroup
-                    #create_home: 'False'
-                    #state: present
-                    #
-
           - name: Config server
             become: 'True'
             template:
