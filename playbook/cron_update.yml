@@ -1,0 +1,24 @@
+---
+- name: update system cron job Play
+  hosts: test
+  become: 'True'
+  tasks:
+          - name: update system cron reboot task
+            cron:
+                    name: update system reboot task
+                    job: "apt update -y >> /var/log/update_script.log && apt upgrade -y >> /var/log/update_script.log"
+                    special_time: 'reboot'
+                    user: root
+
+                    
+          - name: update system cron 4:00 tasks
+            cron:
+                    name: update system 04:00 task
+                    job: "apt update -y >> /var/log/update_script.log && apt upgrade -y >> /var/log/update_script.log"
+                    day: '*'
+                    hour: '4'
+                    minute: '0'
+                    weekday: '0'
+                    month: '*'
+                    user: root
+...
