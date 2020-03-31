@@ -1,6 +1,6 @@
 ---
 - name: Install and config portsentry
-  hosts: all
+  hosts: test
   become: 'True'
   tasks:
           - name: Install package
@@ -8,7 +8,6 @@
                     name: portsentry
                     state: present
             notify: restart portsentry
-
 
           - name: config portsentry mode
             replace:
@@ -26,24 +25,6 @@
                     dest: /etc/portsentry/portsentry.conf
             notify: restart portsentry
 
-            #          - name: kill root
-            #            lineinfile:
-            #        src: /etc/portsentry/portsentry.conf
-            #        line: 'KILL_HOSTS_DENY="ALL: $TARGET$ : DENY"'
-            #        state: preset
-
-
-            #          - name: config portsentry prod
-            #            replace:
-            #         path: /etc/portsentry/portsentry.conf
-            #         regexp: "{{ item.org }}"
-            #        replace: "{{ item.rep }}"
-            #with_items:
-            #        - { org: 'BLOCK_UDP="0"', rep: 'BLOCK_UDP="1"'}
-            #        - { org: 'BLOCK_TCP="0"', rep: 'BLOCK_TCP="1"'}
-            #        - { org: '#KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"', rep: 'KILL_ROUTE="/sbin/iptables -I INPUT -s $TARGET$ -j DROP"' }
-            #notify: restart portsentry
-                     
 
           - name: Setup service
             service:
@@ -56,5 +37,4 @@
             service:
                     name: portsentry
                     state: restarted
-
 ...

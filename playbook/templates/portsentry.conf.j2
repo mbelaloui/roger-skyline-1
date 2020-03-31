@@ -1,10 +1,31 @@
+# {{ ansible_managed }}
+
+#######################
+# Port Configurations #
+#######################
+
+TCP_PORTS=""
+UDP_PORTS=""
+
+###########################################
+# Advanced Stealth Scan Detection Options #
+###########################################
+
 ADVANCED_PORTS_TCP="1024"
 ADVANCED_PORTS_UDP="1024"
+
 ADVANCED_EXCLUDE_TCP="113,139"
 ADVANCED_EXCLUDE_UDP="520,138,137,67"
+
+######################
+# Configuration Files#
+######################
+
 IGNORE_FILE="/etc/portsentry/portsentry.ignore"
 HISTORY_FILE="/var/lib/portsentry/portsentry.history"
 BLOCKED_FILE="/var/lib/portsentry/portsentry.blocked"
+
+
 
 RESOLVE_HOST = "0"
 
@@ -17,3 +38,10 @@ KILL_HOSTS_DENY="ALL: $TARGET$ : DENY"
 SCAN_TRIGGER="0"
 
 KILL_RUN_CMD="/sbin/iptables -I INPUT -s $TARGET$ -j DROP && /sbin/iptables -I INPUT -s $TARGET$ -m limit --limit 3/minute --limit-burst 5 -j LOG --log-level debug --log-prefix 'Portsentry: dropping: '"
+
+
+######################
+# Port Banner Section#
+######################
+...
+#PORT_BANNER="** UNAUTHORIZED ACCESS PROHIBITED *** YOUR CONNECTION ATTEMPT HAS BEEN LOGGED. GO AWAY."
