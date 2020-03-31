@@ -27,6 +27,15 @@
                     mode: 0644
             notify: restart fail2ban
 
+          - name: Config ssh service
+            template:
+                    src: templates/fail2ban_custom_ssh.conf.j2
+                    dest: /etc/fail2ban/jail.d/fail2ban_custom_ssh.conf
+                    group: root
+                    owner: root
+                    mode: 0644
+            notify: restart fail2ban
+
   handlers:
           - name: restart fail2ban
             service: name=fail2ban state=restarted
