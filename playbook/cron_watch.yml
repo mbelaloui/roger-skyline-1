@@ -1,0 +1,24 @@
+---
+- name: watch cron file play
+  hosts: test
+  become: 'True'
+  tasks:
+          - name: copy script watch cron file task
+            template:
+                    src: file/watch_cron.sh
+                    dest: /opt/watch_cron.sh
+                    owner: root
+                    group: root
+                    mode: 700
+
+          - name: Watch cron file task
+            cron:
+                    name: 'watch cron script'
+                    minute: '0'
+                    hour: '0'
+                    day: '*'
+                    weekday: '*'
+                    month: '*'
+                    user: root
+                    job: sh /opt/watch_cron.sh
+...
