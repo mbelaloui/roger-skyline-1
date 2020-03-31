@@ -1,0 +1,24 @@
+# {{ ansible_managed }}
+
+Include /etc/ssh/sshd_config.d/*.conf
+
+Port {{ ssh_port }} 
+
+# Authentication:
+
+PermitRootLogin no
+PubkeyAuthentication yes
+
+PasswordAuthentication no
+PermitEmptyPasswords no
+
+UsePAM yes
+
+X11Forwarding yes
+PrintMotd no
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+# override default of no subsystems
+Subsystem	sftp	/usr/lib/openssh/sftp-server

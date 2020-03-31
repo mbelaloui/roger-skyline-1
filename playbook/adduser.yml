@@ -1,0 +1,37 @@
+---
+- name: adduser and configure ssh key
+  #  hosts: all
+  hosts: test
+  become: 'True'
+  vars:
+          user_name: roger
+          user_pass: password
+  tasks:
+          - name: add user
+            user:
+                    name: "{{ user_name }}"
+                    password: "{{ user_pass }}"
+                    state: present
+                    shell: /bin/sh
+                    ssh_key_file: lookup('file', '~/.ssh/id_rsa.pub') 
+
+          - name: add sudoers file 
+            file:
+                   path: /etc/sudoers.d
+                   owner: root
+                   group: root
+                   mode: 440
+                   state: directory
+
+
+          - name: Add devops user to the sudoers
+            lineinfile:
+                    path: "/etc/sudoers.d/{{ user_name }}"
+                    line: "{{ user_name }}  ALL=(ALL)  NOPASSWD: ALL"
+                    state: present
+                    create: 'True'
+                    owner: root
+                    group: root
+                    mode: 440
+
+...

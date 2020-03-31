@@ -1,47 +1,27 @@
 ---
-- name: Install and config fail2ban play
+- name: Config ssh service play
   #hosts: all
-  #hosts: test
-  hosts: roger
+  hosts: test
   become: 'True'
+  #hosts: roger
   tasks:
-          - name: Update system package
-            apt:
-                    autoclean: 'True'
-                    autoremove: 'True'
-                    update_cache: 'True'
-                    upgrade: 'True'
 
-          - name: Install Fail2ban package
-            apt:
-                    name: fail2ban
+         - name: disable password authentification
+            lineinfile:
+                    dest: /etc/ssh/sshd_config
+                    regexp: "{{ item.regexp }}"
+                    line: "{{ item.line }} "
                     state: present
-            notify: restart fail2ban
-
-          - name: Config Fail2ban
-            template:
-                    src: templates/fail2ban_jail.local.j2
-                    dest: /etc/fail2ban/jail.local
-                    group: root
-                    owner: root
-                    mode: 0644
-            notify: restart fail2ban
-
-           ## this action can be added to the ssh role configure and must be deteleted from here
-           #          - name: Config Fail2ban
-           # template:
-           #         src: templates/fail2ban_custom_ssh.conf.j2
-           #         dest: /etc/fail2ban/jail.d/custom_ssh.conf
-           #         group: root
-           #         owner: root
-           #         mode: 0644
-           # notify: restart fail2ban
-
-
-          - name: start Fail2bane service
-            service: name=fail2ban state=started enabled='True'
+                    backup: 'True'
+            loop:
+                    - { regexp: "^PasswordAuthentication", line: "PasswordAuthentication no" }
+                    - { regexp: "^PermitEmptyPasswords", line: "PermitEmptyPasswords no" }
+                    - { regexp: "^PermitRootLogin", line: "PermitRootLogin no" }
+                    - { regexp: "^PubkeyAuthentication no", line: "PubkeyAuthentication yes" }
+            notify:
+                    restart ssh
 
   handlers:
-          - name: restart fail2ban
-            service: name=fail2ban state=restarted
+          - name: restart ssh
+            service: name=ssh state=restarted enabled=True
 ...
