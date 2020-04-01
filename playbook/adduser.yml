@@ -5,7 +5,7 @@
   become: 'True'
   vars:
           user_name: roger
-          user_pass: password
+          user_pass: p
   tasks:
           - name: add user
             user:
@@ -26,7 +26,7 @@
 
           - name: Add devops user to the sudoers
             lineinfile:
-                    path: "/etc/sudoers.d/{{ user_name }}"
+                    path: "/etc/sudoers.d/{{ user_name }}-suduoers"
                     line: "{{ user_name }}  ALL=(ALL)  NOPASSWD: ALL"
                     state: present
                     create: 'True'
