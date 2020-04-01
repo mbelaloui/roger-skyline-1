@@ -1,0 +1,58 @@
+---
+- name: install nginx
+  hosts: test
+  become: 'True'
+  vars:
+          domain: test
+  tasks:
+          - name: instal packages
+            apt:
+                    name: nginx
+                    state: latest
+            notify: restart nginx
+
+          - name: clean default conf
+            file:
+                    path: '{{ item }}'
+                    state: absent
+            loop: 
+            - '/var/www/default'
+            - '/etc/nginx/sites-enabled/default'
+
+
+          - name: get web site
+            git:
+                    repo: https://github.com/mbelaloui/Piscine_php.git
+                    dest: /home/{{ ansible_user }}/web
+                    force: 'True'
+            notify: restart nginx
+
+          - name: Lien vers www
+            file:
+                    src: '/home/{{ ansible_user }}/web/Jour00/ex03'
+                    dest: '/var/www/{{ domain }}'
+                    state: 'link'
+            notify: restart nginx
+
+          - name: Config nginx
+            template:
+                    src: 'templates/nginx.j2'
+                    dest: '/etc/nginx/sites-available/{{ domain }}'
+            notify: restart nginx
+
+            
+          - name: Activation du domain
+            file:
+                    src: '/etc/nginx/sites-available/{{ domain }}'
+                    dest: '/etc/nginx/sites-enabled/{{ domain }}'
+                    state: 'link'
+            notify: restart nginx
+
+
+  handlers:
+         - name: restart nginx
+           service:
+                   name: nginx
+                   state: restarted
+                   enabled: 'True'
+...
